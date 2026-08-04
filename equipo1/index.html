@@ -155,9 +155,33 @@
 
         .mensaje-exito {
             font-size: 18px;
-            line-height: 1.5;
-            margin: 0 auto 20px;
+            line-height: 1.65;
+            max-width: 720px;
+            margin: 0 auto 25px;
             color: #e8d7b2;
+            text-align: left;
+        }
+
+        .mensaje-exito strong {
+            color: #e8c477;
+        }
+
+        .alerta-mapa {
+            background: rgba(100, 35, 20, 0.45);
+            border: 2px solid #a95d3e;
+            border-radius: 10px;
+            padding: 15px 18px;
+            margin: 20px auto 25px;
+            max-width: 720px;
+            font-size: 17px;
+            line-height: 1.5;
+            color: #f2d6b1;
+        }
+
+        .frase-final {
+            font-style: italic;
+            color: #cdbb98;
+            margin-top: 22px;
         }
 
         .marco-mapa {
@@ -207,7 +231,8 @@
 
         .advertencia {
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 15px;
+            line-height: 1.5;
             color: #cdbb98;
         }
 
@@ -270,6 +295,14 @@
                 font-size: 19px;
                 letter-spacing: 3px;
             }
+
+            .mensaje-exito {
+                font-size: 16px;
+            }
+
+            .alerta-mapa {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -327,10 +360,57 @@
 
         <h2>¡MAPA DESBLOQUEADO!</h2>
 
-        <p class="mensaje-exito">
-            Has descubierto la clave correcta.<br>
-            Ahora puedes consultar el mapa para continuar tu misión.
-        </p>
+        <div class="mensaje-exito">
+
+            <p>
+                Has demostrado que eres un verdadero cazador de tesoros.
+                Has reunido las pistas, descifrado la clave y conseguido
+                que el mapa revele el lugar donde continúa la búsqueda.
+            </p>
+
+            <p>
+                <strong>Observa el mapa con atención.</strong>
+                El lugar señalado es el siguiente territorio que deberás
+                explorar, pero todavía falta descubrir un último secreto.
+            </p>
+
+        </div>
+
+        <div class="alerta-mapa">
+
+            ⚠️ <strong>NO VAYAS TODAVÍA EN BUSCA DE LA LLAVE.</strong>
+
+            <br><br>
+
+            El lugar señalado es demasiado amplio para encontrar el tesoro
+            recorriéndolo al azar. Además, no podrás realizar una búsqueda
+            libre en esa zona sin saber exactamente dónde debes buscar.
+
+            <br><br>
+
+            <strong>
+                El mapa te ha mostrado dónde continuar,
+                pero no dónde exactamente buscar.
+            </strong>
+
+        </div>
+
+        <div class="mensaje-exito">
+
+            <p>
+                Antes de dirigirte al lugar señalado, debes encontrar
+                <strong>la última pista</strong>.
+                Ella te permitirá interpretar las últimas señales y descubrir
+                el punto exacto donde se oculta la llave.
+            </p>
+
+            <p class="frase-final">
+                🏴‍☠️ Un verdadero cazador de tesoros sabe que llegar al
+                lugar correcto no significa haber encontrado todavía el tesoro.
+            </p>
+
+        </div>
+
 
         <div class="marco-mapa">
 
@@ -342,6 +422,7 @@
             >
 
         </div>
+
 
         <div class="acciones">
 
@@ -360,7 +441,8 @@
         </div>
 
         <p class="advertencia">
-            Conserva el mapa. Lo necesitarás para encontrar el lugar señalado.
+            Conserva el mapa. Lo necesitarás para interpretar el lugar
+            señalado y continuar la búsqueda.
         </p>
 
     </section>
