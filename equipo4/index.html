@@ -1,1 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mapa del Tesoro</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Georgia, "Times New Roman", serif;
+            background:
+                radial-gradient(circle at center, #5b3a1f 0%, #2b1a0e 100%);
+            color: #f3dfad;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 850px;
+            text-align: center;
+        }
+
+        /* =========================
+           PANTALLA DE CONTRASEÑA
+        ========================= */
+
+        .acceso {
+            background: rgba(30, 18, 8, 0.92);
+            border: 3px solid #b98a45;
+            border-radius: 14px;
+            padding: 45px 30px;
+            box-shadow:
+                0 0 0 8px rgba(185, 138, 69, 0.12),
+                0 15px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .icono {
+            font-size: 55px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            margin: 5px 0 10px;
+            font-size: clamp(32px, 6vw, 55px);
+            color: #e8c477;
+            text-shadow: 2px 2px 3px #000;
+            letter-spacing: 2px;
+        }
+
+        .subtitulo {
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            color: #e8d7b2;
+        }
+
+        .instruccion {
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        #password {
+            width: min(100%, 400px);
+            padding: 15px;
+            font-size: 22px;
+            text-align: center;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+
+            background: #f0dfb7;
+            color: #25170b;
+
+            border: 2px solid #b98a45;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        #password:focus {
+            border-color: #e8c477;
+            box-shadow: 0 0 12px rgba(232, 196, 119, 0.5);
+        }
+
+        .boton {
+            display: block;
+            margin: 20px auto 0;
+            padding: 14px 30px;
+
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+
+            color: #25170b;
+            background: linear-gradient(#e8c477, #b98a45);
+
+            border: 2px solid #7c5527;
+            border-radius: 8px;
+
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        .boton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .boton:active {
+            transform: translateY(1px);
+        }
+
+        #mensaje {
+            min-height: 28px;
+            margin-top: 18px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #e97865;
+        }
+
+        /* =========================
+           PANTALLA DEL MAPA
+        ========================= */
+
+        .mapa-container {
+            display: none;
+            background: rgba(30, 18, 8, 0.94);
+            border: 3px solid #b98a45;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow:
+                0 0 0 8px rgba(185, 138, 69, 0.12),
+                0 15px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .mapa-container h2 {
+            margin: 5px 0 10px;
+            font-size: clamp(28px, 5vw, 42px);
+            color: #e8c477;
+            text-shadow: 2px 2px 3px #000;
+        }
+
+        .mensaje-exito {
+            font-size: 18px;
+            line-height: 1.65;
+            max-width: 720px;
+            margin: 0 auto 25px;
+            color: #e8d7b2;
+            text-align: left;
+        }
+
+        .mensaje-exito strong {
+            color: #e8c477;
+        }
+
+        .alerta-mapa {
+            background: rgba(100, 35, 20, 0.45);
+            border: 2px solid #a95d3e;
+            border-radius: 10px;
+            padding: 15px 18px;
+            margin: 20px auto 25px;
+            max-width: 720px;
+            font-size: 17px;
+            line-height: 1.5;
+            color: #f2d6b1;
+        }
+
+        .frase-final {
+            font-style: italic;
+            color: #cdbb98;
+            margin-top: 22px;
+        }
+
+        .marco-mapa {
+            background: #e4c78c;
+            padding: 10px;
+            border: 3px solid #8b602d;
+            border-radius: 5px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .marco-mapa img {
+            display: block;
+            width: 100%;
+            height: auto;
+            cursor: zoom-in;
+        }
+
+        .acciones {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .boton-secundario {
+            display: inline-block;
+            padding: 12px 20px;
+
+            color: #25170b;
+            background: #e8c477;
+
+            border: 2px solid #8b602d;
+            border-radius: 7px;
+
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+
+            cursor: pointer;
+        }
+
+        .boton-secundario:hover {
+            background: #f1d695;
+        }
+
+        .advertencia {
+            margin-top: 20px;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #cdbb98;
+        }
+
+        /* =========================
+           VISOR DE MAPA AMPLIADO
+        ========================= */
+
+        .visor {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0,0,0,0.92);
+
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .visor img {
+            max-width: 95%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .cerrar {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+
+            color: white;
+            font-size: 42px;
+            font-family: Arial, sans-serif;
+
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .acceso,
+            .mapa-container {
+                padding: 25px 15px;
+            }
+
+            .subtitulo {
+                font-size: 16px;
+            }
+
+            #password {
+                font-size: 19px;
+                letter-spacing: 3px;
+            }
+
+            .mensaje-exito {
+                font-size: 16px;
+            }
+
+            .alerta-mapa {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <!-- =========================
+         PANTALLA DE ACCESO
+    ========================== -->
+
+    <section class="acceso" id="acceso">
+
+        <div class="icono">🗝️</div>
+
+        <h1>MAPA DEL TESORO</h1>
+
+        <p class="subtitulo">
+            Has llegado hasta aquí, explorador.<br>
+            Solo quienes hayan descubierto la clave correcta
+            podrán revelar el mapa.
+        </p>
+
+        <p class="instruccion">
+            Introduce la contraseña obtenida durante tu búsqueda:
+        </p>
+
+        <input
+            type="text"
+            id="password"
+            maxlength="8"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="********"
+            onkeydown="if(event.key === 'Enter') verificar()"
+        >
+
+        <button class="boton" onclick="verificar()">
+            🔓 DESBLOQUEAR MAPA
+        </button>
+
+        <div id="mensaje"></div>
+
+    </section>
+
+
+    <!-- =========================
+         MAPA DESBLOQUEADO
+    ========================== -->
+
+    <section class="mapa-container" id="mapaContainer">
+
+        <div class="icono">🗺️</div>
+
+        <h2>¡MAPA DESBLOQUEADO!</h2>
+
+        <div class="mensaje-exito">
+
+            <p>
+                Has demostrado que eres un verdadero cazador de tesoros.
+                Has reunido las pistas, descifrado la clave y conseguido
+                que el mapa revele el lugar donde continúa la búsqueda.
+            </p>
+
+            <p>
+                <strong>Observa el mapa con atención.</strong>
+                El lugar señalado es el siguiente territorio que deberás
+                explorar, pero todavía falta descubrir un último secreto.
+            </p>
+
+        </div>
+
+        <div class="alerta-mapa">
+
+            ⚠️ <strong>NO VAYAS TODAVÍA EN BUSCA DE LA LLAVE.</strong>
+
+            <br><br>
+
+            El lugar señalado es demasiado amplio para encontrar el tesoro
+            recorriéndolo al azar. Además, no podrás realizar una búsqueda
+            libre en esa zona sin saber exactamente dónde debes buscar.
+
+            <br><br>
+
+            <strong>
+                El mapa te ha mostrado dónde continuar,
+                pero no dónde exactamente buscar.
+            </strong>
+
+        </div>
+
+        <div class="mensaje-exito">
+
+            <p>
+                Antes de dirigirte al lugar señalado, debes encontrar
+                <strong>la última pista</strong>.
+                Ella te permitirá interpretar las últimas señales y descubrir
+                el punto exacto donde se oculta la llave.
+            </p>
+
+            <p class="frase-final">
+                🏴‍☠️ Un verdadero cazador de tesoros sabe que llegar al
+                lugar correcto no significa haber encontrado todavía el tesoro.
+            </p>
+
+        </div>
+
+
+        <div class="marco-mapa">
+
+            <!-- AQUÍ SE MOSTRARÁ EL MAPA -->
+            <img
+                src="../mapa.png"
+                alt="Mapa del Tesoro"
+                onclick="abrirMapa()"
+            >
+
+        </div>
+
+
+        <div class="acciones">
+
+            <button class="boton-secundario" onclick="abrirMapa()">
+                🔍 AMPLIAR MAPA
+            </button>
+
+            <a
+                class="boton-secundario"
+                href="../mapa.png"
+                download="Mapa_del_Tesoro.png"
+            >
+                📥 GUARDAR MAPA
+            </a>
+
+        </div>
+
+        <p class="advertencia">
+            Conserva el mapa. Lo necesitarás para interpretar el lugar
+            señalado y continuar la búsqueda.
+        </p>
+
+    </section>
+
+</div>
+
+
+<!-- =========================
+     VISOR AMPLIADO
+========================== -->
+
+<div class="visor" id="visor" onclick="cerrarMapa()">
+
+    <span class="cerrar">&times;</span>
+
+    <img
+        src="../mapa.png"
+        alt="Mapa del Tesoro ampliado"
+    >
+
+</div>
+
+
+<script>
+
+    /* ======================================
+       CONTRASEÑA DEL EQUIPO 4
+    ====================================== */
+
+    const CONTRASENA = "99CCS1M7";
+
+
+    /* ======================================
+       VERIFICAR CONTRASEÑA
+    ====================================== */
+
+    function verificar() {
+
+        const entrada = document
+            .getElementById("password")
+            .value
+            .trim()
+            .toUpperCase();
+
+        const mensaje = document.getElementById("mensaje");
+
+        if (entrada === CONTRASENA) {
+
+            document.getElementById("acceso").style.display = "none";
+
+            document.getElementById("mapaContainer").style.display = "block";
+
+            mensaje.innerHTML = "";
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        } else {
+
+            mensaje.innerHTML =
+                '<span class="error">❌ La clave no es correcta. Revisa tus pistas e inténtalo nuevamente.</span>';
+
+            document.getElementById("password").value = "";
+
+            document.getElementById("password").focus();
+        }
+    }
+
+
+    /* ======================================
+       ABRIR MAPA GRANDE
+    ====================================== */
+
+    function abrirMapa() {
+
+        document.getElementById("visor").style.display = "flex";
+
+    }
+
+
+    /* ======================================
+       CERRAR MAPA
+    ====================================== */
+
+    function cerrarMapa() {
+
+        document.getElementById("visor").style.display = "none";
+
+    }
+
+</script>
+
+</body>
+</html>
 
